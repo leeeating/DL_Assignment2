@@ -24,11 +24,11 @@ python training.py --model_name naive --use_channel RGB
 python inference.py --timestamp 06_08_16 --model_name naive
 ```
 
-> 在Naive Model中，我將所有訓練資料用3通道的形式去訓練Resnet34，只有在測試時才處理動態通道的問題。
->
-> 我處理動態通道的方法為Padding，也就是將缺失的通道數用0補足。
->
-> EX：如果該圖片的通道為RG，我就將B通道補0。
+ 在Naive Model中，我將所有訓練資料用3通道的形式去訓練Resnet34，只有在測試時才處理動態通道的問題。
+
+ 我處理動態通道的方法為Padding，也就是將缺失的通道數用0補足。
+
+ EX：如果該圖片的通道為RG，我就將B通道補0。
 
 2. Dynamic Convolution Module : Dy_CNN + Resnet34
 
@@ -42,8 +42,8 @@ python inference.py --timestamp 06_08_16 --model_name naive
 python inference.py --timestamp 06_08_16 --model_name dy_cnn
 ```
 
-> 在Dynamic Convolution Module中，我沿用Naive Model的Resnet34當作backbone網路。不過我在前面加入一層Dynamic Convolution，將通道數不為3的圖片轉換成3通道形式。
-> 在訓練時我固定Naive Model的Resnet34的參數不訓練，只訓練前面的一層Dynamic Convolution。
+ 在Dynamic Convolution Module中，我沿用Naive Model的Resnet34當作backbone網路。不過我在前面加入一層Dynamic Convolution，將通道數不為3的圖片轉換成3通道形式。
+ 在訓練時我固定Naive Model的Resnet34的參數不訓練，只訓練前面的一層Dynamic Convolution。
 
 結果如下
 
@@ -55,6 +55,8 @@ python inference.py --timestamp 06_08_16 --model_name dy_cnn
 | Dy_CNN |0.64 |0.22|0.56|0.19|0.48|0.45|0.45|
 
 * Parmater
+
+在Resnet34中有2130萬個參數量，但因為我們只有訓練一層Dynamic Convolution，所以只需要儲存一次Resnet34以及7種不同的Head，三通道的Head參數量為192個，兩通道的Head參數量為90 $\times$ 3， 一通道的Head參數量為65 $\times$ 3 ，需要額外存的參數量為657個。
 
 ---
 
@@ -83,7 +85,7 @@ Fully connected 也算一層
 
 先訓練一個resnet34(naive)的基礎模型，在用prefix finetuning的方式訓不同head的Dy_cnn（7個）
 
-* [ ] Task 1
+* [X] Task 1
   * [x] training&inference  bcakbone Resnet34
 
   * [x] training mutiple dy_cnn head
@@ -92,11 +94,11 @@ Fully connected 也算一層
 
     * [X] 在inference中實在testing naive model
     * [X] 整合naive test and dy_cnn test
-    * [X] 將原本用shell的執行的naive inference寫入inference.py
+    * [X] 將原本用shell的執行的naive inference寫入<code>inference.py
     * [X] 測試整合
 
-  * [ ] plot
+  * [X] plot
 
-* [ ]Task 2
+* [ ] Task 2
   
-  * [ ]
+  * [ ] 
