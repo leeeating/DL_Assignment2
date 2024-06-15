@@ -13,7 +13,7 @@ from torchvision.models import resnet34
 
 from dataset import ImageMini
 from train_test import train, test, EarlyStopping
-from model import PreFixResnet
+from model import PreFixResnet, CustomModel
 
 ###########################-- init setting --###########################
 parser = argparse.ArgumentParser(description="ResNet34 Training")
@@ -22,7 +22,7 @@ parser.add_argument('--batch_size', type=int, default=128)
 parser.add_argument('--epochs', type=int, default=50)
 parser.add_argument('--device', type=str, default='cuda:0')
 
-parser.add_argument('--model_name', type=str, default = 'naive', help='naive or dy_cnn')
+parser.add_argument('--model_name', type=str, default = 'naive', help='naive or dy_cnn or custom')
 parser.add_argument('--timestamp', type= str, help='input timerecord in model name')
 
 parser.add_argument('--use_channels', type=str, default='RGB')
@@ -64,13 +64,19 @@ if __name__ == "__main__":
 
     # model
     # change resnet34 output to 50 (naive model)
-    model = resnet34()
-    model.fc = nn.Linear(512, 50)
+    if args.model_name in ['dy_cnn', 'naive']:
 
-    # training prefix parameter
-    if args.model_name == 'dy_cnn': 
-        
-        model = PreFixResnet(args.use_channels,train=True)
+        model = resnet34()
+        model.fc = nn.Linear(512, 50)
+
+        # training prefix parameter
+        if args.model_name == 'dy_cnn': 
+            
+            model = PreFixResnet(args.use_channels,train=True)
+
+    else:
+
+        model = CustomModel()
         
     model.to(device)
 
@@ -82,7 +88,7 @@ if __name__ == "__main__":
     # record
     time_record = time.strftime('%m_%d_%H') if args.timestamp is None else args.timestamp
     save_path = f'./ckpt/{time_record}_{args.model_name}_{args.use_channels}.pt'
-    earlystop = EarlyStopping(patience=5, delta=0.01, path=save_path)
+    earlystop = EarlyStopping(patience=5, delta=0.005, path=save_path)
 
     record = {
         'train' : {'loss':[], 'acc':[]},
