@@ -64,20 +64,13 @@ python inference.py --timestamp 06_08_16 --model_name dy_cnn
 
 ---
 
-### Tips
+* Training Custom Model
 
-1. training and testing phase 要能自適應 image size and channel
-最簡單的方式是做data preprocess (全部resize成256x256以及channel設為3)
-當然老師希望(期盼)同學可以設計一個新的Conv Module可以達到dynamically去吃input
-最後的實驗流程由同學自己從testing set中去竄改RGB三通道
+```bash
+python training --model_name custom
+```
 
-2. 與第一題無關，這題需設計模型(僅能使用兩層神經網路)
-Fully connected 也算一層
-目的在於僅設計2層的模型來達到90%的ResNet34效能
-老師有說明不要拿網路上pretrained好的ResNet34
-因為他一定很強，我們要自己設計實驗流程
-固定epoch, optimizer, loss的情況
-自己的模型與ResNet34的差異
+我模型中總共使用四層CNN，前面兩層為Dynamic Convolution搭配MaxPooling，後面兩層為正常Convolution搭配Residual Block使用，最後再接一層Self-attention。
 
 ---
 
@@ -91,14 +84,13 @@ Fully connected 也算一層
   * [x] training mutiple dy_cnn head
 
   * [X] inference
-
     * [X] 在inference中實在testing naive model
     * [X] 整合naive test and dy_cnn test
-    * [X] 將原本用shell的執行的naive inference寫入<code>inference.py
+    * [X] 將原本用shell的執行的naive inference寫入 <code>inference.py</code>
     * [X] 測試整合
+  * [x] plot
 
-  * [X] plot
-
-* [ ] Task 2
-  
-  * [ ] 
+* [x] Task 2
+    * [x] construct model
+    * [x] training model
+    * [x] plot

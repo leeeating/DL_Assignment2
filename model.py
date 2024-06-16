@@ -146,15 +146,15 @@ class SelfAttention(nn.Module):
 
         batch_size,_ ,H, W = imgs.shape
 
-        values = self.values(imgs).view(batch_size, self.heads, self.head_dim, -1)
-        keys = self.keys(imgs).view(batch_size, self.heads, self.head_dim, -1)
-        queries = self.queries(imgs).view(batch_size, self.heads, self.head_dim, -1)
+        values = self.values(imgs).view(batch_size, self.heads, -1, self.head_dim)
+        keys = self.keys(imgs).view(batch_size, self.heads, -1, self.head_dim)
+        queries = self.queries(imgs).view(batch_size, self.heads, -1, self.head_dim)
 
         # 使用 einsum 計算點積注意力
-        energy = torch.einsum("nhdl,nhdk->nhlk", [queries, keys])
+        energy = torch.einsum("nhqd,nhkd->nhqk", [queries, keys])
         attention = torch.softmax(energy / (self.embed_size ** (1 / 2)), dim=3)
 
-        out = torch.einsum("nhll,nhdl->nhdl", [attention, values])
+        out = torch.einsum("nhqk,nhqd->nhqd", [attention, values])
         out = out.view(batch_size, self.embed_size, H, W)
         out = self.fc_out(out)
 
