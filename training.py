@@ -24,8 +24,10 @@ parser.add_argument('--device', type=str, default='cuda:0')
 
 parser.add_argument('--model_name', type=str, default = 'naive', help='naive or dy_cnn or custom')
 parser.add_argument('--timestamp', type= str, help='input timerecord in model name')
-
 parser.add_argument('--use_channels', type=str, default='RGB')
+
+parser.add_argument('--patience', type=int, default=5)
+parser.add_argument('--delta', type=float, default=0.02, help='Early Stopping Delta')
 
 args = parser.parse_args()
 
@@ -88,7 +90,7 @@ if __name__ == "__main__":
     # record
     time_record = time.strftime('%m_%d_%H') if args.timestamp is None else args.timestamp
     save_path = f'./ckpt/{time_record}_{args.model_name}_{args.use_channels}.pt'
-    earlystop = EarlyStopping(patience=5, delta=0.005, path=save_path)
+    earlystop = EarlyStopping(patience=args.patience, delta=args.delta, path=save_path)
 
     record = {
         'train' : {'loss':[], 'acc':[]},
