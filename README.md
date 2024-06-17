@@ -12,13 +12,15 @@ Compare  the  performance  of the  model  using the dynamic convolution module w
 
 1. Naive Model : Resnet34
 
-* Training
+* Training 
 
 ```bash
 python training.py --model_name naive --use_channel RGB
 ```
 
 * Inference
+
+你要將timestamp改成[Naive Model](#method)使用的時間戳
 
 ```bash
 python inference.py --timestamp 06_08_16 --model_name naive
@@ -30,15 +32,18 @@ python inference.py --timestamp 06_08_16 --model_name naive
 
  EX：如果該圖片的通道為RG，我就將B通道補0。
 
-2. Dynamic Convolution Module : Dy_CNN + Resnet34
+1. Dynamic Convolution Module : Dy_CNN + Resnet34
 
+* Training
+在執行前你需要更改檔案裡的timestamp，你要將.sh檔裡的timestamp改成[Naive Model](#method)使用的時間戳
 ```bash
-.dy_cnn_train.sh
+./dy_cnn_train.sh
 ```
 
 * Inference
 
-```bash
+你要將timestamp改成[Naive Model](#method)使用的時間戳
+```shell
 python inference.py --timestamp 06_08_16 --model_name dy_cnn
 ```
 
@@ -56,6 +61,7 @@ python inference.py --timestamp 06_08_16 --model_name dy_cnn
 
 * Parmater
 
+計算參數及FLOPS的過程在 `cost analysis.ipynb`.
 在Resnet34中有2130萬個參數量，但因為我們只有訓練一層Dynamic Convolution，所以只需要儲存一次Resnet34以及7種不同的Head，三通道的Head參數量為192個，兩通道的Head參數量為90 $\times$ 3， 一通道的Head參數量為65 $\times$ 3 ，需要額外存的參數量為657個。
 
 ---
@@ -73,7 +79,12 @@ python training --model_name custom
 我模型中總共使用四層CNN，前面兩層為Dynamic Convolution搭配MaxPooling，後面兩層為正常Convolution搭配Residual Block使用，最後再接一層Self-attention。
 
 ---
+### Log File
 
+所有紀錄檔的檔名格式皆為 `timestamp_modelname_usechannel`
+如果檔名中有`infernce`代表只紀錄測試集的Accuracy, Loss
+
+---
 ### TODO
 
 先訓練一個resnet34(naive)的基礎模型，在用prefix finetuning的方式訓不同head的Dy_cnn（7個）
@@ -86,7 +97,7 @@ python training --model_name custom
   * [X] inference
     * [X] 在inference中實在testing naive model
     * [X] 整合naive test and dy_cnn test
-    * [X] 將原本用shell的執行的naive inference寫入 <code>inference.py</code>
+    * [X] 將原本用shell的執行的naive inference寫入 `inference.py`
     * [X] 測試整合
   * [x] plot
 
