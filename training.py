@@ -11,9 +11,9 @@ from torch.optim import Adam, lr_scheduler
 from torch.utils.data import DataLoader
 from torchvision.models import resnet34
 
-from dataset import ImageMini
-from train_test import train, test, EarlyStopping
-from model import PreFixResnet, CustomModel
+from model.dataset import ImageMini
+from model.train_test import train, test, EarlyStopping
+from model.model import PreFixResnet, CustomModel
 
 ###########################-- init setting --###########################
 parser = argparse.ArgumentParser(description="ResNet34 Training")

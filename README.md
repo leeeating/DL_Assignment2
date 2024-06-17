@@ -33,7 +33,7 @@ python inference.py --timestamp 06_08_16 --model_name naive
 2. Dynamic Convolution Module : Dy_CNN + Resnet34
 
 ```bash
-./shell_script/dy_cnn_train.sh
+.dy_cnn_train.sh
 ```
 
 * Inference

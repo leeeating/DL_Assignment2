@@ -8,9 +8,9 @@ import torch.nn as nn
 
 from torchvision.models import resnet34
 
-from dataset import ImageMini
-from train_test import test
-from model import PreFixResnet
+from model.dataset import ImageMini
+from model.train_test import test
+from model.model import PreFixResnet
 
 
 ###########################-- init setting --###########################
